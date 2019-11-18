@@ -1,0 +1,101 @@
+# Snakemake rules involving picard-tools
+# https://broadinstitute.github.io/picard/
+#
+# Note: This rule file should be included in bam.rules.
+# Global variables (e.g. directory paths) should be declared in
+# bam.rules and are passed down to the individual tool rule files!
+#
+# Author: Maurits Evers
+# License: GPLv3
+# Original date: 22-10-2016
+# Last changed: 15-10-2019
+
+
+# Mark duplicates using Picard tools
+rule mark_duplicates:
+    input:
+        join(
+            config["analysisdir"],
+            "{reference_version}/alignment/{sample}.sorted.bam")
+    output:
+        bam = join(
+            config["analysisdir"],
+            "{reference_version}/picard-tools/dupes/{sample}_markedDupes.bam"),
+        txt = join(
+            config["analysisdir"],
+            "{reference_version}/picard-tools/dupes/{sample}_metrics.txt")
+    log:
+        "logs/picard-tools_MarkDuplicates_{reference_version}_{sample}.log"
+    params:
+        cmd = config["picard"]["cmd"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} MarkDuplicates \
+            I={input} \
+            O={output.bam} \
+            M={output.txt} 2> {log}
+        """
+
+
+# Estimate insert size using Picard tools
+# Note: This only makes sense for paired-end reads
+rule estimate_insert_size:
+    input:
+        join(
+            config["bamdir"],
+            config["reference"]["id"],
+            "{sample}.bam")
+    output:
+        txt = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "picard-tools/insert_size/insert_size_{sample}.txt"),
+        pdf = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "picard-tools/insert_size/insert_size_{sample}.pdf")
+    log:
+        "logs/picard-tools_CollectInsertSizeMetrics_{sample}.log"
+    params:
+        cmd = config["picard"]["cmd"],
+        ref = REF
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} CollectInsertSizeMetrics \
+            I={input} \
+            H={output.pdf} \
+            O={output.txt} 2> {log}
+        """
+
+
+# Generate summary from MarkDuplicates summary files
+# Note: This rule is not connected and has no wildcards,
+# and should be run separately, e.g.
+#  snakemake generate_MarkDuplicates_summary_stats
+# Note: Requires Perl script summarise_DuplicationMetrics.pl
+rule generate_MarkDuplicates_summary_stats:
+    input:
+        expand(join(
+            config["analysisdir"],
+            config["reference"]["id"], \
+            "picard-tools/dupes/{sample}_metrics.txt"),
+            sample = config["units"].keys())
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "picard-tools_MarkDuplicates_stats.tsv")
+    params:
+        dir = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "picard-tools/dupes")
+    version: "1.0"
+    shell:
+        """
+            perl scripts/summarise_DuplicationMetrics.pl \
+            {params.dir} \
+            txt > {output}
+        """

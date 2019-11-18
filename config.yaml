@@ -1,0 +1,165 @@
+# Directories
+basedir: ".."
+refdir: "ref/"
+fastqdir: "rawData/"
+fastqcdir: "rawData/QC/"
+bamdir: "alignment/"
+analysisdir: "analysis/"
+
+# Samples
+# Note: `samples` values have to match `units` keys
+samples:
+        CX-5461+I-BET151:
+                IP:
+                    - IP_CX-5461+I-BET151_rep1
+                    - IP_CX-5461+I-BET151_rep2
+                control:
+                    - input_rep1
+                    - input_rep2
+                    - input_rep3
+        CX-5461:
+                IP:
+                    - IP_CX-5461_rep1
+                    - IP_CX-5461_rep2
+                control:
+                    - input_rep1
+                    - input_rep2
+                    - input_rep3
+        I-BET151:
+                IP:
+                    - IP_I-BET151_rep1
+                    - IP_I-BET151_rep2
+                control:
+                    - input_rep1
+                    - input_rep2
+                    - input_rep3
+        doxorubicin:
+                IP:
+                    - IP_doxorubicin_rep1
+                    - IP_doxorubicin_rep2
+                control:
+                    - input_rep1
+                    - input_rep2
+                    - input_rep3
+        vehicle:
+                IP:
+                    - IP_vehicle_rep1
+                    - IP_vehicle_rep2
+                control:
+                    - input_rep1
+                    - input_rep2
+                    - input_rep3
+
+
+# Units
+# Note: `units` keys have to match `samples` values
+units:
+        input_rep1:
+                - input-1_S1_R1_001.fastq.gz
+        input_rep2:
+                - input-2_S7_R1_001.fastq.gz
+        input_rep3:
+                - Input-1REDO_S23_R1_001.fastq.gz
+        IP_CX-5461_rep1:
+                - CX-1_S3_R1_001.fastq.gz
+        IP_CX-5461_rep2:
+                - CX-2_S9_R1_001.fastq.gz
+        IP_I-BET151_rep1:
+                - IBET-1_S4_R1_001.fastq.gz
+        IP_I-BET151_rep2:
+                - IBET-2_S10_R1_001.fastq.gz
+        IP_CX-5461+I-BET151_rep1:
+                - COM-1_S5_R1_001.fastq.gz
+        IP_CX-5461+I-BET151_rep2:
+                - COM-2_S11_R1_001.fastq.gz
+        IP_doxorubicin_rep1:
+                - DOX-1_S6_R1_001.fastq.gz
+        IP_doxorubicin_rep2:
+                - DOX-2_S12_R1_001.fastq.gz
+        IP_vehicle_rep1:
+                - V-1_S2_R1_001.fastq.gz
+        IP_vehicle_rep2:
+                - V-2_S8_R1_001.fastq.gz
+
+
+        IP_DMSO_rep1:
+                - DMSO-BRD4_TTAGGC_L001_R1_001.fastq.gz
+        IP_DMSO_rep2:
+                - DMSO-BRD4_TTAGGC_L002_R1_001.fastq.gz
+        IP_iBET_rep1:
+                - iBET-BRD4_CAGATC_L001_R1_001.fastq.gz
+        IP_iBET_rep2:
+                - iBET-BRD4_CAGATC_L002_R1_001.fastq.gz
+
+
+# Reference sequence
+reference:
+    id: "GRCh38+rDNA_repeat"
+    filename: "GRCh38+rDNA_repeat.fa"
+    gtf: "GRCh38+rDNA_repeat.gtf"
+    bed_RefSeq: "GRCh38_RefSeq_genes.bed"
+    bed: "GRCh38+rDNA_repeat.bed.gz"
+
+
+# fastqc parameters
+fastqc:
+    cmd: "fastqc"
+
+
+# bowtie2-build parameters
+bowtie2-build:
+    cmd: "bowtie2-build"
+
+
+# bowtie2 parameters
+bowtie2:
+    cmd: "bowtie2"
+    in_fmt: "-q"
+    phred: "--phred33"
+    maxins: 500
+    mismatch: 0
+    threads: 6
+
+
+# samtools parameters
+samtools:
+    cmd: "samtools"
+
+
+# picard parameters
+picard:
+    cmd: "java -jar ~/Programs/picard.jar"
+
+
+# QualiMap parameters
+qualimap:
+    cmd: "~/Programs/qualimap_v2.2.1/qualimap"
+
+
+# bedtools parameters
+bedtools:
+    cmd: "bedtools"
+    window_size: 10000
+    window_step: 1000
+
+
+# deeptools parameters
+deeptools:
+    ignore_for_normalisation:
+        - "MT"
+        - "X"
+        - "Y"
+        - "U13369.1"
+    cm_upstream: 2000
+    cm_downstream: 2000
+    threads: 6
+    binsize: 10
+
+
+# MACS2 parameters
+# Note: Even though macs2 accepts gsize = mm, gsize needs
+# to be a numeric for further downstream bash maths
+macs2:
+    gsize: 1.87e9
+    qvalue: 0.05
+    format: "BAM"

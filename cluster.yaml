@@ -1,0 +1,57 @@
+# Default host resource attributes
+# Details: http://www.gridengine.eu/mangridengine/htmlman5/queue_conf.html
+#  slots    = Max number of concurrently executing jobs per queue
+#  s_vmem   = Total amount of combined virtual memory; SIGXCPU if exceeded
+#  h_vmem   = Total amount of combined virtual memory; SIGKILL if exceeded
+
+---
+__default__ :
+        queue : "all.q,hugemem.q"
+        virtual_free: "24G"
+        h_vmem: "25G"
+        threads : 1
+        outstream: "snakemake_cluster.out"
+        errorstream: "snakemake_cluster.err"
+
+bowtie2_pe :
+        queue: "hugemem.q"
+        threads : 1
+
+deeptools_bamCoverage :
+        threads: 6
+        virtual_free: "10G"
+        h_vmem: "10G"
+
+deeptools_bamCompare :
+        threads: 6
+        virtual_free: "10G"
+        h_vmem: "10G"
+
+deeptools_plotFingerprint :
+        threads: 1
+        virtual_free: "40G"
+        h_vmem: "40G"
+
+deeptools_multiBamSummary_genome:
+        threads: 1
+        virtual_free: "40G"
+        h_vmem: "40G"
+
+deeptools_computeMatrix:
+        threads: 1
+        virtual_free: "40G"
+        h_vmem: "40G"
+
+deeptools_metagene_heatmap:
+        threads: 1
+        virtual_free: "60G"
+        h_vmem: "60G"
+
+create_qualimap_report :
+        virtual_free: "24G"
+        h_vmem: "25G"
+        threads: 1
+
+show_distr_dupes_Rscript:
+        virtual_free: "40G"
+        h_vmem: "40G"

@@ -1,0 +1,55 @@
+# Snakemake rules to generate reference sequence data
+#
+# Author: Maurits Evers
+# License: GPLv3
+# Original date: 14-10-2016
+# Last changed: 28-07-2017
+
+
+# Make fasta index
+rule make_fasta_index:
+    input:
+        REF
+    output:
+        REF.replace("fa", "fa.fai")
+    params:
+        cmd = config["samtools"]["cmd"]
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} faidx {input}
+        """
+
+
+# Make bowtie2 index
+rule make_bowtie2_index:
+    input:
+        REF,
+        REF.replace("fa", "fa.fai")
+    output:
+        IDX
+    log:
+        expand("logs/bowtie2-build_{id}.log", id = config["reference"]["id"])
+    params:
+        cmd  = "bowtie2-build",
+        base = re.sub(".fa", "", REF)
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} {input[0]} {params.base} > {log}
+        """
+
+
+# Make a genome BED file from fasta index
+rule make_bed_from_fasta_index:
+    input:
+        REF.replace("fa", "fa.fai")
+    output:
+        REF.replace(".fa", "_genome.bed")
+    params:
+        cmd = "perl scripts/fai2bed.pl"
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} {input} > {output}
+        """

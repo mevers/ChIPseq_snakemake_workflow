@@ -1,0 +1,155 @@
+
+
+
+# Perform PCA using custom R script
+rule R_plot_PCA:
+    input:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/{countfile}.tab")
+    output:
+        join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/plot.PCA.{countfile}.pdf")
+    log: "logs/perform_PCA_{countfile}.log"
+    version: "1.0"
+    params:
+        cmd    = "Rscript-3.3.2 scripts/perform_PCA.R",
+        outdir = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools"),
+    shell:
+        """
+            {params.cmd} \
+            --input {input} \
+            --outdir {params.outdir} \
+            --scale \
+            --center &> {log}
+        """
+
+
+# Show fingerprint plot using custom R script
+rule R_plot_fingerprint:
+    input:
+        tab = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/fingerprint.bw{binwidth}.skipZeros.tab")
+    output:
+        pdf = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/plot.fingerprint.bw{binwidth}.skipZeros.pdf")
+    wildcard_constraints:
+        binwidth = "\d+"
+    log: "logs/plot_fingerprint_bw{binwidth}.log"
+    params:
+        cmd    = "Rscript-3.3.2 scripts/plot_fingerprint.R",
+        outdir = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools"),
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} \
+            --input {input} \
+            --outdir {params.outdir} &> {log}
+        """
+
+
+# Show meta-gene profile plot using custom R script
+rule R_plot_metagene_profile:
+    input:
+        mat = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/scoreMatrix.bw{binwidth}.mat.gz"),
+    output:
+        pdf = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools/plot.scoreMatrix.bw{binwidth}.mat.pdf")
+    wildcard_constraints:
+        binwidth = "\d+"
+    log: "logs/plot_metagene_profile_bw{binwidth}.log"
+    params:
+        cmd    = "Rscript-3.3.2 scripts/plot_metagene_profile.R",
+        outdir = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "deeptools"),
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} \
+            --input {input} \
+            --outdir {params.outdir} &> {log}
+        """
+
+
+# Show meta-gene profile plot using custom R script
+rule R_show_distr_dupes:
+    input:
+        expand(join(
+            config["analysisdir"],
+            "{{reference_genome}}/picard-tools/dupes/{sample}.dupes.bam"),
+            sample = config["units"].keys())
+    output:
+        pdf = expand(join(
+            config["analysisdir"],
+            "{{reference_genome}}/picard-tools/dupes/plot.distr_dupes_{what}.pdf"),
+            what = ["frac", "DPK"])
+    log: "logs/plot_distr_dupes_{reference_genome}.log"
+    params:
+        cmd    = "Rscript-3.3.2 scripts/plot_distr_dupes.R",
+        input  = lambda wildcards, input: ",".join(input),
+        outdir = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "picard-tools/dupes"),
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} \
+            --input {params.input} \
+            --outdir {params.outdir} &> {log}
+        """
+
+
+# Show coverage distribution per chromosome per sample
+rule R_show_coverage:
+    input:
+        expand(join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "samtools/bedcov/cov.genome_w{window}_s{step}.{sample}.bed"),
+            window = config["bedtools"]["window_size"],
+            step = config["bedtools"]["window_step"],
+            sample = config["units"].keys())
+    output:
+        pdf = expand(join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "samtools/bedcov/plot.coverage.{suf}"),
+            suf = ["pdf", "png"])
+    log: "logs/plot_coverage.log"
+    params:
+        cmd    = "Rscript-3.3.2 scripts/plot_coverage.R",
+        input  = lambda wildcards, input: ",".join(input),
+        outdir = join(
+            config["analysisdir"],
+            config["reference"]["id"],
+            "samtools/bedcov"),
+    version: "1.0"
+    shell:
+        """
+            {params.cmd} \
+            --input {params.input} \
+            --outdir {params.outdir} \
+            --skipZeros \
+            --normaliseToAutosomeCov &> {log}
+        """
