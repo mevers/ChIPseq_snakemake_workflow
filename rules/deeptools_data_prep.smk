@@ -4,6 +4,13 @@
 # License: GPLv3
 
 
+def get_specific_args(key):
+    if key is not None:
+        return(key)
+    else:
+        return("")
+
+
 # deeptools bamCoverage
 rule deeptools_bamCoverage:
     """
@@ -84,18 +91,17 @@ rule deeptools_bamCompare:
     params:
         cmd = "bamCompare",
         threads = config["deeptools"]["threads"],
-        ignore = config["deeptools"]["ignore_for_normalisation"]
+        ignore = config["deeptools"]["ignore_for_normalisation"],
+        other_args = get_specific_args(config["deeptools"]["bamCompare_specific_args"])
     shell:
         """
             {params.cmd} \
             -b1 {input.ChIP} \
             -b2 {input.control} \
             --operation {wildcards.operation} \
-            --scaleFactorsMethod SES \
-            --sampleLength 2000 \
             --binSize {wildcards.binwidth} \
             --ignoreForNormalization {params.ignore} \
-            --extendReads 150 \
+            {params.other_args} \
             -p {params.threads} \
             -v \
             --ignoreDuplicates \

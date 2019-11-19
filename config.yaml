@@ -8,88 +8,70 @@ analysisdir: "analysis/"
 
 # Samples
 # Note: `samples` values have to match `units` keys
+# `samples` keys have to match condition/treatment of `samples` values
 samples:
-        CX-5461+I-BET151:
+        WT:
                 IP:
-                    - IP_CX-5461+I-BET151_rep1
-                    - IP_CX-5461+I-BET151_rep2
+                        - IP_WT_rep1
+                        - IP_WT_rep2
+                        - IP_WT_rep3
                 control:
-                    - input_rep1
-                    - input_rep2
-                    - input_rep3
-        CX-5461:
+                        - control_WT_rep1
+        PreMal:
                 IP:
-                    - IP_CX-5461_rep1
-                    - IP_CX-5461_rep2
+                        - IP_PreMal_rep1
+                        - IP_PreMal_rep2
+                        - IP_PreMal_rep3
                 control:
-                    - input_rep1
-                    - input_rep2
-                    - input_rep3
-        I-BET151:
+                        - control_PreMal_rep1
+        Mal:
                 IP:
-                    - IP_I-BET151_rep1
-                    - IP_I-BET151_rep2
+                        - IP_Mal_rep1
+                        - IP_Mal_rep2
+                        - IP_Mal_rep3
                 control:
-                    - input_rep1
-                    - input_rep2
-                    - input_rep3
-        doxorubicin:
-                IP:
-                    - IP_doxorubicin_rep1
-                    - IP_doxorubicin_rep2
-                control:
-                    - input_rep1
-                    - input_rep2
-                    - input_rep3
-        vehicle:
-                IP:
-                    - IP_vehicle_rep1
-                    - IP_vehicle_rep2
-                control:
-                    - input_rep1
-                    - input_rep2
-                    - input_rep3
+                        - control_Mal_rep1
 
 
 # Units
 # Note: `units` keys have to match `samples` values
 units:
-        input_rep1:
-                - input-1_S1_R1_001.fastq.gz
-        input_rep2:
-                - input-2_S7_R1_001.fastq.gz
-        input_rep3:
-                - Input-1REDO_S23_R1_001.fastq.gz
-        IP_CX-5461_rep1:
-                - CX-1_S3_R1_001.fastq.gz
-        IP_CX-5461_rep2:
-                - CX-2_S9_R1_001.fastq.gz
-        IP_I-BET151_rep1:
-                - IBET-1_S4_R1_001.fastq.gz
-        IP_I-BET151_rep2:
-                - IBET-2_S10_R1_001.fastq.gz
-        IP_CX-5461+I-BET151_rep1:
-                - COM-1_S5_R1_001.fastq.gz
-        IP_CX-5461+I-BET151_rep2:
-                - COM-2_S11_R1_001.fastq.gz
-        IP_doxorubicin_rep1:
-                - DOX-1_S6_R1_001.fastq.gz
-        IP_doxorubicin_rep2:
-                - DOX-2_S12_R1_001.fastq.gz
-        IP_vehicle_rep1:
-                - V-1_S2_R1_001.fastq.gz
-        IP_vehicle_rep2:
-                - V-2_S8_R1_001.fastq.gz
-
-
-        IP_DMSO_rep1:
-                - DMSO-BRD4_TTAGGC_L001_R1_001.fastq.gz
-        IP_DMSO_rep2:
-                - DMSO-BRD4_TTAGGC_L002_R1_001.fastq.gz
-        IP_iBET_rep1:
-                - iBET-BRD4_CAGATC_L001_R1_001.fastq.gz
-        IP_iBET_rep2:
-                - iBET-BRD4_CAGATC_L002_R1_001.fastq.gz
+        control_WT_rep1:
+                - 140120_SN1055_0187_AC2RPNACXX/Sample_WT-input/WT-input_CAGATC_L008_R1_001.fastq.gz
+                - 140120_SN1055_0187_AC2RPNACXX/Sample_WT-input/WT-input_CAGATC_L008_R2_001.fastq.gz
+        control_PreMal_rep1:
+                - 140704_SN1055_0211_AH9WAAADXX/Sample_Premal-input-repeat/Premal-input-repeat_ATCACG_L002_R1_001.fastq.gz
+                - 140704_SN1055_0211_AH9WAAADXX/Sample_Premal-input-repeat/Premal-input-repeat_ATCACG_L002_R2_001.fastq.gz
+        control_Mal_rep1:
+                - 140120_SN1055_0187_AC2RPNACXX/Sample_Mal-input/Mal-input_ACTTGA_L008_R1_001.fastq.gz
+                - 140120_SN1055_0187_AC2RPNACXX/Sample_Mal-input/Mal-input_ACTTGA_L008_R2_001.fastq.gz
+        IP_WT_rep1:
+                - 140827_SN1055_0223_AHAC84ADXX/Sample_WT-R1/WT-R1_CGATGT_L001_R1_001.fastq.gz
+                - 140827_SN1055_0223_AHAC84ADXX/Sample_WT-R1/WT-R1_CGATGT_L001_R2_001.fastq.gz
+        IP_WT_rep2:
+                - 140827_SN1055_0223_AHAC84ADXX/Sample_WT-R1-2/WT-R1-2_TAGCTT_L001_R1_001.fastq.gz
+                - 140827_SN1055_0223_AHAC84ADXX/Sample_WT-R1-2/WT-R1-2_TAGCTT_L001_R2_001.fastq.gz
+        IP_WT_rep3:
+                - 140120_SN1055_0187_AC2RPNACXX/Sample_WT1/WT1_ATCACG_L006_R1_001.fastq.gz
+                - 140120_SN1055_0187_AC2RPNACXX/Sample_WT1/WT1_ATCACG_L006_R2_001.fastq.gz
+        IP_PreMal_rep1:
+                - 140827_SN1055_0223_AHAC84ADXX/Sample_Premal-R1/Premal-R1_TGACCA_L001_R1_001.fastq.gz
+                - 140827_SN1055_0223_AHAC84ADXX/Sample_Premal-R1/Premal-R1_TGACCA_L001_R2_001.fastq.gz
+        IP_PreMal_rep2:
+                - 140120_SN1055_0187_AC2RPNACXX/Sample_PreM1/PreM1_CGATGT_L006_R1_001.fastq.gz
+                - 140120_SN1055_0187_AC2RPNACXX/Sample_PreM1/PreM1_CGATGT_L006_R2_001.fastq.gz
+        IP_PreMal_rep3:
+                - 150319_SN1055_0254_AHHFWJADXX/Sample_Prem-RR1/Prem-RR1_ACAGTG_merged_R1_001.fastq.gz
+                - 150319_SN1055_0254_AHHFWJADXX/Sample_Prem-RR1/Prem-RR1_ACAGTG_merged_R2_001.fastq.gz
+        IP_Mal_rep1:
+                - 140827_SN1055_0223_AHAC84ADXX/Sample_Mal-R1/Mal-R1_CAGATC_L001_R1_001.fastq.gz
+                - 140827_SN1055_0223_AHAC84ADXX/Sample_Mal-R1/Mal-R1_CAGATC_L001_R2_001.fastq.gz
+        IP_Mal_rep2:
+                - 140120_SN1055_0187_AC2RPNACXX/Sample_Mal1/Mal1_TTAGGC_L006_R1_001.fastq.gz
+                - 140120_SN1055_0187_AC2RPNACXX/Sample_Mal1/Mal1_TTAGGC_L006_R2_001.fastq.gz
+        IP_Mal_rep3:
+                - 150319_SN1055_0254_AHHFWJADXX/Sample_Mal-RR1/Mal-RR1_TGACCA_merged_R1_001.fastq.gz
+                - 150319_SN1055_0254_AHHFWJADXX/Sample_Mal-RR1/Mal-RR1_TGACCA_merged_R2_001.fastq.gz
 
 
 # Reference sequence
@@ -119,6 +101,11 @@ bowtie2:
     maxins: 500
     mismatch: 0
     threads: 6
+
+
+# bwa-mem parameters
+bwa-mem:
+    cmd: "bwa-mem"
 
 
 # samtools parameters
@@ -152,8 +139,11 @@ deeptools:
         - "U13369.1"
     cm_upstream: 2000
     cm_downstream: 2000
-    threads: 6
     binsize: 10
+    threads: 6
+    bamCompare_specific_args:
+#        - "--scaleFactorsMethod SES"
+#        - "--sampleLength 5000"
 
 
 # MACS2 parameters
@@ -162,4 +152,4 @@ deeptools:
 macs2:
     gsize: 1.87e9
     qvalue: 0.05
-    format: "BAM"
+    format: "BAMPE"

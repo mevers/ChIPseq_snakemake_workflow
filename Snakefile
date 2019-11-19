@@ -119,7 +119,7 @@ INI = expand(join(
     binwidth = 10)
 
 
-for smp in INI:
+for smp in DT_RATIO:
     message("Sample " + smp + " will be created")
 
 #######################################################
@@ -146,4 +146,4 @@ include: "rules/pygenometracks.smk"
 # Input fastq files
 rule all:
     input:
-        DT_RATIO + IDR + PGT
+        DT_RATIO + IDR
