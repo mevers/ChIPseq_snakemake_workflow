@@ -56,6 +56,11 @@ rule macs2_callpeak_with_pooled_control:
         - Select regions with enrichment scores in range [5, 500]
         - Reanalyse shape profile to deconvolve subpeaks within each peak
         - format from config["macs2"]["format"]
+    Depends on:
+        - Sorted IP BAM files {input.ChIP}
+        - Sorted control BAM files {input.ctrl}
+        - Optional MACS2 predict2 output files {fragment_d}; only required if
+          config["macs2"]["format"] == "BAM" (i.e. single-end data)
     """
     version: "1.0"
     conda: "../envs/macs2.yaml"
@@ -67,10 +72,13 @@ rule macs2_callpeak_with_pooled_control:
             config["analysisdir"],
             "{{reference_version}}/alignment/{input_sample}.sorted.bam"),
             input_sample = config["samples"][wildcards.treatment]["control"]),
-        fragment_d = join(
-            config["analysisdir"],
-            "{reference_version}/macs2/predictd",
-            "IP_{treatment}_{rep}.R")
+        fragment_d = (
+            join(
+                config["analysisdir"],
+                "{reference_version}/macs2/predictd",
+                "IP_{treatment}_{rep}.R")
+                if config["macs2"]["format"] == "BAM"
+                else [])
     output:
         join(
             config["analysisdir"],
