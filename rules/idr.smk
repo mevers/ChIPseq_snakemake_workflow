@@ -8,21 +8,25 @@
 rule idr:
     """
     Perform irreproducibile discovery analysis
+    Tested on IDR 2.0.3 from https://github.com/nboley/idr
     """
     version: "1.0"
     input:
-        lambda wildcards: [join(
+        peak1 = join(
             config["analysisdir"],
             "{reference_version}/macs2/callpeak",
-            name + "_vs_pooled_control_peaks.narrowPeak")
-            for name in config["samples"][wildcards.treatment]["IP"]]
+            "IP_{treatment}_{rep1}_vs_pooled_control_peaks.narrowPeak"),
+        peak2 = join(
+            config["analysisdir"],
+            "{reference_version}/macs2/callpeak",
+            "IP_{treatment}_{rep1}_vs_pooled_control_peaks.narrowPeak")
     output:
         join(
             config["analysisdir"],
             "{reference_version}/idr/",
-            "{treatment}_IDRsummarised.narrowPeak")
+            "{treatment}_IDR{rep1}_vs_{rep2}.narrowPeak")
     log:
-        "logs/idr_{reference_version}_{treatment}.log"
+        "logs/idr_{reference_version}_{treatment}_{rep1}_vs_{rep2}.log"
     params:
         cmd = "idr"
     shell:

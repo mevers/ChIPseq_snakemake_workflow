@@ -81,17 +81,18 @@ rule deeptools_bamCompare:
         join(
             config["analysisdir"],
             "{reference_version}/deeptools/bamCompare/{operation}",
-            "IP_{treatment}_{rep}_vs_pooled_control.normSES.bw{binwidth}.bw")
+            "IP_{treatment}_{rep}_vs_pooled_control.norm{scale_method}.bw{binwidth}.bw")
     log:
         join(
             "logs",
             "deeptools_bamCompare_{operation}_{reference_version}_" +
-            "IP_{treatment}_{rep}_vs_pooled_control.normSES.bw{binwidth}.log")
+            "IP_{treatment}_{rep}_vs_pooled_control.norm{scale_method}.bw{binwidth}.log")
     threads: 8
     params:
         cmd = "bamCompare",
         threads = config["deeptools"]["threads"],
         ignore = config["deeptools"]["ignore_for_normalisation"],
+        scale_method = config["deeptools"]["scale_method"],
         other_args = get_specific_args(config["deeptools"]["bamCompare_specific_args"])
     shell:
         """
@@ -101,6 +102,7 @@ rule deeptools_bamCompare:
             --operation {wildcards.operation} \
             --binSize {wildcards.binwidth} \
             --ignoreForNormalization {params.ignore} \
+            --scaleFactorsMethod {wildcards.scale_method} \
             {params.other_args} \
             -p {params.threads} \
             -v \

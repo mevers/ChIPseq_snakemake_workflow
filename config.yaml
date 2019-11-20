@@ -141,8 +141,8 @@ deeptools:
     cm_downstream: 2000
     binsize: 10
     threads: 6
+    scale_method: "readCount"
     bamCompare_specific_args:
-#        - "--scaleFactorsMethod SES"
 #        - "--sampleLength 5000"
 
 

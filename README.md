@@ -59,24 +59,28 @@ Change `samples` and `units` (see the previous section for naming requirements)
 
 - Confirm `ignore_for_normalisation` entries
 - Set `binsize` for BigWig plots
-- Adjust `bamCompare_specific_args`; arguments specifying the scaling should go here, e.g.
+- Specify `scale_method` which must be one of `["readCount", "SES", "None"]`
+- Adjust `bamCompare_specific_args`; e.g. arguments pertaining to the scaling should go here, e.g.
 
     ```yaml
     deeptools:
         ...
+        scale_method: "SES"
         bamCompare_specific_args:
-            - "--scaleFactorsMethod SES"
             - "--sampleLength 2000"
-    ```
-
-    Which scaling method is best depends on the data and requirements. For example, if coverage is low `--scaleFactorsMethod SES` might not work (or require a larger `--sampleLength` value). In that case, the default scaling method may be used by either leaving the `bamCompare_specific_args` key empty, or by explicitly specifying
-
-    ```yaml
-    deeptools:
         ...
-        bamCompare_specific_args:
-            - "--scaleFactorsMethod readCount"
     ```
+
+**A note on scaling**  
+Which scaling method is best depends on the data and requirements. For example, if coverage is low `scale_method: "SES"` (which corresponds to `--scaleFactorsMethod SES` in `bamCompare`) might not work, or might require a larger `bamCompare` `--sampleLength` value. In that case, the `readCount` scaling method may be used
+
+```yaml
+deeptools:
+    ...
+    scale_method: "readCount"
+    bamCompare_specific_args:
+    ...
+```
 
 ### `macs2` parameters
 

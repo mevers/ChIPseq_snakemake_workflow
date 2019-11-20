@@ -8,6 +8,7 @@
 from os.path import join
 import re
 import glob
+import itertools
 
 def message(mes):
   sys.stderr.write("|--- " + mes + "\n")
@@ -35,67 +36,31 @@ REF = join(
 # bowtie2 index
 IDX = expand(re.sub("fa", "{idx}.bt2", REF), idx = range(1,5))
 
-# BAM targets: sorted and sorted+deduped BAM files plus indices
-ALL_BAM = expand(join(
-    config["analysisdir"],
-    config["reference"]["id"],
-    "alignment/{sample}.{suf}"),
-    sample = config["units"].keys(),
-    suf = [
-        "bam",
-        "sorted.bam",
-        "sorted.bam.bai",
-        "sorted.dedup.bam",
-        "sorted.dedup.bam.bai"])
-
-# deepTools targets
-DT_COR = expand(join(
-    config["analysisdir"],
-    config["reference"]["id"],
-    "deeptools/heatmap.cor.genome.bw{binwidth}.pdf"),
-     #suf = ["_10kb", "_peaks"])
-    binwidth = "10000")
-DT_PCA = expand(join(
-    config["analysisdir"],
-    config["reference"]["id"],
-    "deeptools/PCA.genome.bw{binwidth}.pdf"),
-     #suf = ["_10kb", "_peaks"])
-    binwidth = "10000")
-DT_PCA2 = expand(join(
-    config["analysisdir"],
-    config["reference"]["id"],
-    "deeptools/plot.PCA.counts.all.genome.bw{binwidth}.pdf"),
-    binwidth = "10000")
-DT_FP = expand(join(
-    config["analysisdir"],
-    config["reference"]["id"],
-    "deeptools/plot.fingerprint.bw{binwidth}.skipZeros.pdf"),
-    binwidth = "500")
-DT_PROF = expand(join(
-    config["analysisdir"],
-    config["reference"]["id"],
-    "deeptools/computeMatrix/scoreMatrix.{what}.bw{binwidth}.mat.gz"),
-    what = ["coverage", "log2", "subtract"],
-    binwidth = config["deeptools"]["binsize"])
-DT_ALL = DT_COR + DT_PCA + DT_PCA2 + DT_FP + DT_PROF
-
-
+# DeepTools BigWig targets
 DT_RATIO = expand(join(
     config["analysisdir"],
     config["reference"]["id"],
-    "deeptools/bamCompare/{operation}/{name}_vs_pooled_control.normSES.bw10.bw"),
+    "deeptools/bamCompare/{operation}",
+    "{name}_vs_pooled_control.norm{scale_method}.bw10.bw"),
     operation = ["log2", "ratio", "subtract"],
     name = [sample
         for treatment in config["samples"].keys()
-            for sample in config["samples"][treatment]["IP"]])
+            for sample in config["samples"][treatment]["IP"]],
+    scale_method = config["deeptools"]["scale_method"])
 
+# IDR targets
 IDR = [join(
     config["analysisdir"],
     config["reference"]["id"],
     "idr",
-    treatment + "_IDRsummarised.narrowPeak")
-    for treatment in config["samples"].keys()]
+    treatment + "_" + comparison + ".narrowPeak")
+    for treatment in config["samples"].keys()
+        for comparison in ["_vs_".join(
+            re.sub(r"IP_(\w+_)*", "IDR", x) for x in w)
+            for w in itertools.combinations(
+                config["samples"][treatment]["IP"], 2)]]
 
+# PyGenomeTracks targets
 PGT = expand(join(
     config["analysisdir"],
     config["reference"]["id"],
@@ -109,6 +74,7 @@ PGT = expand(join(
         "U13369.1:1-42998"],       # rDNA
     suffix = ["pdf", "png"])
 
+
 INI = expand(join(
     config["analysisdir"],
     config["reference"]["id"],
@@ -119,7 +85,7 @@ INI = expand(join(
     binwidth = 10)
 
 
-for smp in DT_RATIO:
+for smp in IDR:
     message("Sample " + smp + " will be created")
 
 #######################################################
