@@ -132,7 +132,7 @@ rule deeptools_computeMatrix_coverage:
         gtf = join(
             config["refdir"],
             config["reference"]["id"],
-            config["reference"]["bed_RefSeq"])
+            config["reference"]["bed"])
     output:
         mat = join(
             config["analysisdir"],
@@ -190,7 +190,7 @@ rule deeptools_computeMatrix_comparison:
         gtf = join(
             config["refdir"],
             config["reference"]["id"],
-            config["reference"]["bed_RefSeq"])
+            config["reference"]["bed"])
     output:
         mat = join(
             config["analysisdir"],

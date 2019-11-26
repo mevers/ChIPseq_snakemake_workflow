@@ -76,11 +76,9 @@ units:
 
 # Reference sequence
 reference:
-    id: "GRCh38+rDNA_repeat"
-    filename: "GRCh38+rDNA_repeat.fa"
-    gtf: "GRCh38+rDNA_repeat.gtf"
-    bed_RefSeq: "GRCh38_RefSeq_genes.bed"
-    bed: "GRCh38+rDNA_repeat.bed.gz"
+    id: "GRCm38+rDNA_repeat"
+    filename: "GRCm38+rDNA_repeat.fa"
+    bed: "GRCm38+rDNA_repeat.bed.gz"
 
 
 # fastqc parameters

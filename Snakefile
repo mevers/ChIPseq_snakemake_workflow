@@ -71,7 +71,7 @@ PGT = expand(join(
         "6:73509724-73527058",     # EEF1A1
         "9:97341742-97566477",     # TDRD7
         "8:127724462-127753922",   # MYC
-        "U13369.1:1-42998"],       # rDNA
+        "BK000964.3.1:1-45306"],   # rDNA
     suffix = ["pdf", "png"])
 
 
@@ -81,12 +81,12 @@ INI = expand(join(
     "pygenometracks",
     "tracks_{region}_{operation}_bw{binwidth}.ini"),
     operation = ["ratio"],
-    region = ["U13369.1", "genome"],
+    region = ["BK000964.3", "genome"],
     binwidth = 10)
 
 
-for smp in IDR:
-    message("Sample " + smp + " will be created")
+#for smp in IDR:
+#    message("Sample " + smp + " will be created")
 
 #######################################################
 ###################### Includes #######################
@@ -112,4 +112,4 @@ include: "rules/pygenometracks.smk"
 # Input fastq files
 rule all:
     input:
-        DT_RATIO + IDR
+        DT_RATIO + IDR + INI
