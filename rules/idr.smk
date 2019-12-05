@@ -19,12 +19,12 @@ rule idr:
         peak2 = join(
             config["analysisdir"],
             "{reference_version}/macs2/callpeak",
-            "IP_{treatment}_{rep1}_vs_pooled_control_peaks.narrowPeak")
+            "IP_{treatment}_{rep2}_vs_pooled_control_peaks.narrowPeak")
     output:
         join(
             config["analysisdir"],
             "{reference_version}/idr/",
-            "{treatment}_IDR{rep1}_vs_{rep2}.narrowPeak")
+            "{treatment}_IDR_{rep1}_vs_{rep2}.narrowPeak")
     log:
         "logs/idr_{reference_version}_{treatment}_{rep1}_vs_{rep2}.log"
     params:
