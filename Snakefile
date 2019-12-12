@@ -53,20 +53,8 @@ IDR = [join(
     config["analysisdir"],
     config["reference"]["id"],
     "idr",
-    treatment + "_IDR_" + comparison + ".narrowPeak")
-    for treatment in config["samples"].keys()
-        for comparison in ["_vs_".join(
-            re.sub(r"IP_(\w+_)*", "", x) for x in w)
-            for w in itertools.combinations(
-                config["samples"][treatment]["IP"], 2)]]
-
-# IDR targets
-#IDR = [join(
-#    config["analysisdir"],
-#    config["reference"]["id"],
-#    "idr",
-#    treatment + "_IDR_summarised.narrowPeak")
-#    for treatment in config["samples"].keys()]
+    treatment + "_IDR_summarised.narrowPeak")
+    for treatment in config["samples"].keys()]
 
 
 # PyGenomeTracks targets
@@ -94,8 +82,8 @@ INI = expand(join(
     binwidth = 10)
 
 
-for smp in IDR:
-    message("Sample " + smp + " will be created")
+#for smp in IDR:
+#    message("Sample " + smp + " will be created")
 
 #######################################################
 ###################### Includes #######################

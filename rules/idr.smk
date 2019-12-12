@@ -41,4 +41,24 @@ rule idr:
         """
 
 
-#
+rule idr_plus:
+    """
+    Perform irreproducibile discovery analysis for >2 samples
+    Tested on IDR 2.0.3 from https://github.com/nboley/idr
+    """
+    version: "1.0"
+    input:
+        peaks = lambda wildcards: expand(join(
+            config["analysisdir"],
+            "{{reference_version}}/macs2/callpeak",
+            "{sample}_vs_pooled_control_peaks.narrowPeak"),
+            sample = config["samples"][wildcards.treatment]["IP"])
+    output:
+        join(
+            config["analysisdir"],
+            "{reference_version}/idr/",
+            "{treatment}_IDR_summarised.narrowPeak")
+    log:
+        "logs/idr_{reference_version}_{treatment}.log"
+    script:
+        "../scripts/idr_plus.py"
